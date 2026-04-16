@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hidecor Design Assignment — 5 Creative Briefs</title>
+  <meta name="description" content="A design challenge document containing 5 creative briefs for Hidecor — a commercial interiors brand. Dark, architectural, editorial." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <style>
+  /* ============================================================
+     DESIGN SYSTEM
+  ============================================================ */
+  :root {
+    --black:      #080808;
+    --charcoal:   #1C1A18;
+    --ivory:      #F2EDE4;
+    --ivory-dim:  #C8C2B8;
+    --gold:       #C09B52;
+    --gold-dark:  #A07F38;
+    --warm-grey:  #8A8078;
+    --mid:        #3A3530;
+    --ease:       cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--warm-grey);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    cursor: none;
+  }
+
+  /* Noise grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 9998;
+  }
+
+  /* ============================================================
+     TYPOGRAPHY
+  ============================================================ */
+  .serif { font-family: 'Cormorant Garamond', serif; }
+  .sans  { font-family: 'DM Sans', sans-serif; }
+
+  /* ============================================================
+     CURSOR
+  ============================================================ */
+  .cursor-dot, .cursor-ring {
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    border-radius: 50%;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    will-change: transform;
+  }
+  .cursor-dot  { width: 5px; height: 5px; background: var(--gold); }
+  .cursor-ring { width: 34px; height: 34px; border: 1px solid rgba(192,155,82,0.45); transition: width 0.2s, height 0.2s; }
+
+  /* ============================================================
+     NAV
+  ============================================================ */
+  nav {
+    position: fixed; top: 0; left: 0; width: 100%;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 22px 5%;
+    z-index: 500;
+    opacity: 0;
+    transition: background 0.4s var(--ease), backdrop-filter 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(8,8,8,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold);
+    font-size: 20px;
+    letter-spacing: 0.15em;
+  }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-link {
+    font-size: 10px; text-transform: uppercase;
+    letter-spacing: 3px; color: var(--ivory-dim);
+    text-decoration: none;
+    position: relative; padding-bottom: 3px;
+  }
+  .nav-link::after {
+    content: ''; position: absolute; left: 0; bottom: 0;
+    width: 100%; height: 1px;
+    background: var(--gold);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s var(--ease);
+  }
+  .nav-link:hover::after { transform: scaleX(1); }
+
+  /* ============================================================
+     LAYOUT HELPERS
+  ============================================================ */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
+  .gold-rule { width: 48px; height: 1px; background: var(--gold); }
+  .full-rule  { width: 100%; height: 1px; background: rgba(192,155,82,0.2); transform: scaleX(0); transform-origin: left; }
+
+  /* ============================================================
+     SECTION 00 — HERO
+  ============================================================ */
+  #hero {
+    height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    background: var(--black);
+  }
+  .hero-content { text-align: center; position: relative; z-index: 1; }
+
+  .hero-line-wrap { overflow: hidden; display: block; }
+  .hero-tag {
+    font-size: 10px; letter-spacing: 4px; color: var(--gold);
+    text-transform: uppercase; display: block; margin-bottom: 24px;
+  }
+  .hero-h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(56px, 8vw, 96px);
+    font-weight: 300; color: var(--ivory);
+    letter-spacing: -0.03em; line-height: 1.0;
+    display: block;
+  }
+  .hero-h1.italic { font-style: italic; color: var(--ivory-dim); }
+  .hero-body {
+    font-size: 13px; color: var(--warm-grey); font-weight: 300;
+    max-width: 480px; margin: 28px auto 0; line-height: 1.85;
+  }
+  .hero-cta {
+    font-size: 10px; letter-spacing: 3px; color: var(--gold);
+    text-transform: uppercase; margin-top: 40px; display: inline-block;
+  }
+  .arrow-bounce { display: inline-block; margin-left: 6px; }
+
+  .hero-vertical {
+    position: absolute; left: 40px; bottom: 40px;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 9px; color: var(--warm-grey); letter-spacing: 2px;
+  }
+  .hero-count {
+    position: absolute; right: 5%; bottom: 32px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px; font-weight: 300;
+    color: var(--ivory); opacity: 0.08;
+  }
+
+  /* ============================================================
+     BEFORE YOU START — INTERSTITIAL
+  ============================================================ */
+  #before-start {
+    background: var(--charcoal);
+    padding: 80px 5%;
+  }
+  .before-grid {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 40% 60%; gap: 60px;
+    align-items: start;
+  }
+  .before-label {
+    font-size: 9px; text-transform: uppercase;
+    letter-spacing: 4px; color: var(--gold); margin-bottom: 16px;
+  }
+  .before-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px; color: var(--ivory); line-height: 1.2;
+  }
+  .before-rules { display: flex; flex-direction: column; gap: 20px; }
+  .before-rule-item { display: flex; align-items: flex-start; gap: 14px; }
+  .before-rule-arrow { color: var(--gold); font-size: 14px; margin-top: 1px; flex-shrink: 0; }
+  .before-rule-text { font-size: 14px; color: var(--ivory-dim); line-height: 1.6; }
+  .ai-note {
+    margin-top: 28px; font-style: italic;
+    font-size: 12px; color: var(--warm-grey);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 20px; line-height: 1.7;
+  }
+
+  /* ============================================================
+     BRIEF SECTIONS — SHARED
+  ============================================================ */
+  .brief-divider {
+    position: relative; height: 1px; overflow: hidden; margin: 0;
+  }
+  .brief-divider .full-rule { width: 100%; }
+
+  .brief-section { position: relative; padding: 0; }
+
+  /* [A] SECTION HEADER */
+  .brief-header {
+    background: #0A0909;
+    padding: 80px 5% 60px;
+    position: relative; overflow: hidden;
+  }
+  .brief-watermark {
+    position: absolute; right: 3%; top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 280px; font-weight: 700;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(192,155,82,0.08);
+    line-height: 1; pointer-events: none; user-select: none;
+  }
+  .brief-header-inner { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+  .brief-tag {
+    font-size: 9px; text-transform: uppercase;
+    letter-spacing: 4px; color: var(--gold);
+    margin-bottom: 20px; display: block;
+  }
+  .brief-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(40px, 5vw, 64px); font-weight: 300;
+    color: var(--ivory); line-height: 1.1; margin-bottom: 24px;
+  }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+  .pill {
+    font-size: 9px; letter-spacing: 1px;
+    border: 1px solid rgba(192,155,82,0.3);
+    padding: 4px 12px; color: var(--ivory-dim);
+    border-radius: 2px;
+  }
+  .pull-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-style: italic;
+    color: var(--gold); line-height: 1.4;
+    margin-bottom: 16px;
+  }
+  .brand-line { font-size: 11px; color: var(--warm-grey); }
+
+  /* [B] SCENARIO CARD */
+  .scenario-wrap {
+    background: var(--charcoal);
+    padding: 60px 5%;
+  }
+  .scenario-card {
+    max-width: 1200px; margin: 0 auto;
+    border-left: 3px solid var(--gold);
+    padding-left: 32px;
+  }
+  .scenario-label {
+    font-size: 9px; text-transform: uppercase;
+    letter-spacing: 4px; color: var(--gold);
+    margin-bottom: 16px; display: block;
+  }
+  .scenario-body {
+    font-size: 14px; line-height: 1.85;
+    color: var(--ivory-dim);
+  }
+  .scenario-body span.gold { color: var(--gold); font-weight: 500; }
+
+  /* Stat strip */
+  .stat-strip {
+    background: #0A0909;
+    padding: 40px 5%; border-top: 1px solid rgba(255,255,255,0.04);
+  }
+  .stat-strip-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 20px; text-align: center;
+  }
+  .stat-item {}
+  .stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px; font-weight: 300;
+    color: var(--gold); line-height: 1;
+  }
+  .stat-label { font-size: 11px; color: var(--warm-grey); margin-top: 6px; letter-spacing: 1px; }
+
+  /* [C] DELIVERABLES */
+  .deliverables-wrap { padding: 60px 5%; background: var(--black); }
+  .deliverables-inner { max-width: 1200px; margin: 0 auto; }
+  .deliverables-label {
+    font-size: 9px; text-transform: uppercase;
+    letter-spacing: 4px; color: var(--gold);
+    margin-bottom: 28px; display: block;
+  }
+  .deliverables-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
+  }
+  .del-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 4px; padding: 24px;
+    position: relative; overflow: hidden;
+    transition: background 0.25s var(--ease), transform 0.25s var(--ease);
+  }
+  .del-card::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: var(--gold);
+    transform: scaleY(0); transform-origin: top;
+    transition: transform 0.25s var(--ease);
+  }
+  .del-card:hover { background: rgba(255,255,255,0.04); transform: translateY(-4px); }
+  .del-card:hover::before { transform: scaleY(1); }
+  .del-arrow { color: var(--gold); font-size: 16px; margin-bottom: 12px; display: block; }
+  .del-text { font-size: 13px; color: rgba(242,237,228,0.7); line-height: 1.7; }
+
+  /* Deliverables 3-grid (Brief 05) */
+  .deliverables-grid.three { grid-template-columns: repeat(3, 1fr); }
+  .del-card.large { padding: 32px; }
+
+  /* [D] Q&A ACCORDION */
+  .qa-wrap { padding: 40px 5% 60px; background: var(--charcoal); }
+  .qa-inner { max-width: 1200px; margin: 0 auto; }
+  .qa-label {
+    font-size: 9px; text-transform: uppercase;
+    letter-spacing: 4px; color: var(--gold);
+    margin-bottom: 24px; display: block;
+  }
+  .qa-item { border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .qa-question {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding: 20px 0; cursor: pointer; gap: 20px;
+  }
+  .qa-q-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-style: italic;
+    color: var(--ivory-dim); line-height: 1.4;
+  }
+  .qa-toggle {
+    color: var(--gold); font-size: 18px;
+    flex-shrink: 0; transition: transform 0.3s var(--ease);
+    margin-top: 2px;
+  }
+  .qa-item.open .qa-toggle { transform: rotate(45deg); }
+  .qa-answer-wrap { overflow: hidden; max-height: 0; transition: max-height 0.4s var(--ease); }
+  .qa-answer {
+    border-left: 1px solid var(--gold);
+    padding: 0 0 24px 20px;
+    font-size: 13px; color: var(--warm-grey); line-height: 1.8;
+  }
+
+  /* [E] TESTING FOOTER */
+  .testing-strip {
+    padding: 24px 5%;
+    background: rgba(192,155,82,0.06);
+    border-top: 1px solid rgba(192,155,82,0.2);
+  }
+  .testing-inner { max-width: 1200px; margin: 0 auto; display: flex; gap: 20px; align-items: flex-start; }
+  .testing-label {
+    font-size: 9px; text-transform: uppercase;
+    letter-spacing: 4px; color: var(--gold);
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .testing-text { font-size: 13px; color: rgba(138,128,120,0.8); font-style: italic; line-height: 1.7; }
+
+  /* Brief 05 testing strip */
+  .testing-strip.wildcard {
+    background: rgba(192,155,82,0.1);
+    border: 1px solid rgba(192,155,82,0.3);
+  }
+
+  /* ============================================================
+     BRIEF 01 — SPECIFIC
+  ============================================================ */
+  .copy-ref-wrap { padding: 0 5% 40px; background: var(--black); }
+  .copy-ref-inner { max-width: 1200px; margin: 0 auto; }
+  .copy-ref-toggle {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 10px; text-transform: uppercase; letter-spacing: 3px;
+    color: var(--gold); cursor: pointer; border: none; background: none;
+    padding: 0; transition: opacity 0.2s;
+  }
+  .copy-ref-toggle:hover { opacity: 0.7; }
+  .copy-ref-content {
+    margin-top: 24px; overflow: hidden; max-height: 0;
+    transition: max-height 0.5s var(--ease);
+  }
+  .copy-ref-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 4px; padding: 32px;
+  }
+  .copy-section-label {
+    font-size: 9px; text-transform: uppercase;
+    letter-spacing: 3px; color: var(--gold);
+    margin-bottom: 16px; display: block;
+  }
+  .carousel-slides { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 12px; }
+  .slide-card {
+    flex-shrink: 0; width: 200px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 3px; padding: 20px;
+  }
+  .slide-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px; color: rgba(192,155,82,0.2);
+    line-height: 1; margin-bottom: 10px;
+  }
+  .slide-text { font-size: 11px; color: var(--ivory-dim); line-height: 1.7; }
+  .copy-block { margin-top: 24px; }
+  .copy-body { font-size: 13px; color: var(--warm-grey); line-height: 1.8; }
+
+  /* ============================================================
+     BRIEF 02 — SPECIFIC
+  ============================================================ */
+  .belief-wrap { padding: 0 5% 40px; background: var(--black); }
+  .belief-inner { max-width: 1200px; margin: 0 auto; }
+  .belief-box {
+    background: rgba(29,56,48,0.15);
+    border-left: 3px solid var(--gold);
+    padding: 28px 32px; border-radius: 2px;
+  }
+  .belief-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; font-style: italic;
+    color: var(--ivory); line-height: 1.4;
+  }
+
+  /* ============================================================
+     BRIEF 03 — SPECIFIC
+  ============================================================ */
+  .whatsapp-wrap { padding: 40px 5% 0; background: var(--black); }
+  .whatsapp-inner { max-width: 1200px; margin: 0 auto; }
+  .whatsapp-bubble {
+    display: inline-block; background: #1E1E1E;
+    border-radius: 0 16px 16px 16px;
+    padding: 18px 22px; max-width: 420px;
+    transform: rotate(0.5deg);
+    border: 1px solid rgba(255,255,255,0.07);
+    position: relative;
+  }
+  .whatsapp-text { font-size: 14px; color: var(--ivory-dim); line-height: 1.7; }
+  .whatsapp-time {
+    font-size: 9px; color: var(--warm-grey);
+    margin-top: 8px; text-align: right; letter-spacing: 1px;
+  }
+  .location-tags { display: flex; gap: 10px; margin-top: 28px; flex-wrap: wrap; }
+  .loc-tag {
+    font-size: 10px; letter-spacing: 2px;
+    border: 1px solid rgba(192,155,82,0.3);
+    color: var(--ivory-dim); padding: 5px 14px;
+    border-radius: 999px;
+  }
+
+  .tagline-directions { padding: 40px 5%; background: #0A0909; }
+  .tagline-directions-inner { max-width: 1200px; margin: 0 auto; }
+  .tagline-label {
+    font-size: 9px; text-transform: uppercase;
+    letter-spacing: 4px; color: var(--gold);
+    margin-bottom: 24px; display: block;
+  }
+  .direction-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .direction-card {
+    background: #0A0909;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 4px; padding: 28px;
+  }
+  .direction-card.selected {
+    background: rgba(192,155,82,0.06);
+    border-color: rgba(192,155,82,0.4);
+  }
+  .dir-badge {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 1px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .dir-badge.filled { background: var(--gold); color: var(--black); border-color: var(--gold); }
+  .dir-label {
+    font-size: 9px; text-transform: uppercase;
+    letter-spacing: 3px; color: var(--warm-grey); margin-bottom: 12px;
+  }
+  .dir-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; color: var(--ivory); line-height: 1.3; margin-bottom: 12px;
+  }
+  .dir-tone { font-size: 12px; color: var(--warm-grey); line-height: 1.6; }
+  .dir-selected-pill {
+    display: inline-block; margin-top: 14px;
+    font-size: 8px; text-transform: uppercase; letter-spacing: 2px;
+    background: rgba(192,155,82,0.2); color: var(--gold);
+    padding: 3px 10px; border-radius: 999px;
+  }
+
+  /* ============================================================
+     BRIEF 04 — SPECIFIC
+  ============================================================ */
+  .urgency-strip { padding: 32px 5%; background: var(--charcoal); }
+  .urgency-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 16px; text-align: center;
+  }
+  .urgency-item {}
+  .urgency-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px; color: var(--gold); font-weight: 300;
+  }
+  .urgency-desc { font-size: 10px; color: var(--warm-grey); margin-top: 4px; letter-spacing: 1px; }
+
+  .constraint-wrap { padding: 0 5% 40px; background: var(--black); }
+  .constraint-inner { max-width: 1200px; margin: 0 auto; }
+  .constraint-box {
+    border: 1px solid rgba(192,155,82,0.3);
+    border-radius: 4px; padding: 24px 28px;
+    background: rgba(192,155,82,0.04);
+  }
+  .constraint-label {
+    font-size: 9px; text-transform: uppercase;
+    letter-spacing: 3px; color: var(--gold);
+    margin-bottom: 12px; display: block;
+  }
+  .constraint-text { font-size: 13px; color: var(--warm-grey); line-height: 1.7; }
+
+  /* ============================================================
+     BRIEF 05 — SPECIFIC (WILDCARD)
+  ============================================================ */
+  .brief-header.wildcard { padding: 100px 5% 80px; }
+  .brief-title.split { font-size: clamp(48px, 6vw, 72px); font-style: italic; }
+
+  .wildcard-pull {
+    padding: 60px 5%; text-align: center;
+    background: #0A0909;
+  }
+  .wildcard-pull-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 48px); font-style: italic;
+    color: var(--gold); max-width: 700px; margin: 0 auto;
+    line-height: 1.3;
+  }
+  .wildcard-brand-line { font-size: 13px; color: var(--warm-grey); margin-top: 16px; }
+
+  /* ============================================================
+     FOOTER
+  ============================================================ */
+  footer {
+    background: var(--black);
+    padding: 100px 5%;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+  .footer-luck {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px; font-style: italic; font-weight: 300;
+    color: var(--ivory);
+  }
+  .footer-sub { font-size: 13px; color: var(--warm-grey); margin-top: 8px; }
+  .footer-rule { width: 48px; height: 1px; background: var(--gold); margin: 32px auto; }
+  .footer-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; color: var(--gold); letter-spacing: 0.35em;
+  }
+  .footer-tagline { font-size: 10px; color: var(--warm-grey); margin-top: 8px; letter-spacing: 1px; }
+
+  /* ============================================================
+     RESPONSIVE
+  ============================================================ */
+  @media (max-width: 768px) {
+    * { cursor: auto !important; }
+    .cursor-dot, .cursor-ring { display: none; }
+    .nav-links { display: none; }
+    .hero-h1 { font-size: 56px; }
+    .before-grid { grid-template-columns: 1fr; gap: 36px; }
+    .deliverables-grid, .deliverables-grid.three { grid-template-columns: 1fr; }
+    .direction-grid { grid-template-columns: 1fr; }
+    .stat-strip-inner { grid-template-columns: 1fr; }
+    .urgency-inner { grid-template-columns: repeat(2, 1fr); }
+    .brief-watermark { font-size: 140px; }
+    .hero-vertical { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+  </style>
+</head>
+<body>
+
+  <!-- CURSOR -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- ── NAV ──────────────────────────────────────────────── -->
+  <nav id="navbar">
+    <div class="nav-logo">HIDECOR</div>
+    <div class="nav-links">
+      <a href="#brief-01" class="nav-link">Brief 01</a>
+      <a href="#brief-02" class="nav-link">Brief 02</a>
+      <a href="#brief-03" class="nav-link">Brief 03</a>
+      <a href="#brief-04" class="nav-link">Brief 04</a>
+      <a href="#brief-05" class="nav-link">Brief 05</a>
+    </div>
+  </nav>
+
+  <!-- ── SECTION 00: HERO ──────────────────────────────────── -->
+  <section id="hero">
+    <div class="hero-content">
+      <span class="hero-line-wrap">
+        <span class="hero-tag" id="heroTag">2 DAYS &nbsp;·&nbsp; 5 BRIEFS &nbsp;·&nbsp; DESIGN CHALLENGE</span>
+      </span>
+      <span class="hero-line-wrap">
+        <span class="hero-h1" id="heroH1">Hidecor</span>
+      </span>
+      <span class="hero-line-wrap">
+        <span class="hero-h1 italic" id="heroH1b">Design Assignment</span>
+      </span>
+      <p class="hero-body" id="heroBody">
+        This isn't about how many tools you know or how aesthetic your moodboards look. We want to see how you think, how you solve, and how you turn a brief into something that actually works.
+      </p>
+      <span class="hero-cta" id="heroCTA">
+        SCROLL TO BEGIN <span class="arrow-bounce" id="arrowBounce">↓</span>
+      </span>
+    </div>
+
+    <div class="hero-vertical">Social · Video · Print · Branding · Newsletter</div>
+    <div class="hero-count">01 / 05</div>
+  </section>
+
+  <!-- ── BEFORE YOU START ───────────────────────────────────── -->
+  <section id="before-start">
+    <div class="before-grid">
+      <div class="before-left">
+        <div class="before-label">Before You Start</div>
+        <h2 class="before-heading">The rules of<br>engagement.</h2>
+      </div>
+      <div class="before-right">
+        <div class="before-rules">
+          <div class="before-rule-item">
+            <span class="before-rule-arrow">→</span>
+            <span class="before-rule-text">Submit one PDF with all sections clearly labelled</span>
+          </div>
+          <div class="before-rule-item">
+            <span class="before-rule-arrow">→</span>
+            <span class="before-rule-text">Design files via Figma, Canva, or Illustrator — share as links</span>
+          </div>
+          <div class="before-rule-item">
+            <span class="before-rule-arrow">→</span>
+            <span class="before-rule-text">Write your own copy — no placeholder text anywhere</span>
+          </div>
+          <div class="before-rule-item">
+            <span class="before-rule-arrow">→</span>
+            <span class="before-rule-text">No brand guidelines given. That is the point.</span>
+          </div>
+        </div>
+        <div class="ai-note">
+          On AI tools: This assignment goes through an AI-use check before it reaches us. What we are evaluating is your thinking, your taste, and your personality as a designer.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- BRIEF 01 — THE SOCIAL MEDIA SPRINT                      -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <div class="brief-divider"><div class="full-rule" id="rule1"></div></div>
+
+  <section class="brief-section" id="brief-01">
+    <!-- A: Header -->
+    <div class="brief-header">
+      <div class="brief-watermark" data-watermark>01</div>
+      <div class="brief-header-inner">
+        <span class="brief-tag">Brief 01 of 05</span>
+        <h2 class="brief-title">The Social<br>Media Sprint</h2>
+        <div class="pill-row">
+          <span class="pill">Hidecor</span>
+          <span class="pill">Instagram</span>
+          <span class="pill">LinkedIn</span>
+          <span class="pill">Reels</span>
+        </div>
+        <p class="pull-quote">"We just handed over our biggest GCC project. Make it famous."</p>
+        <p class="brand-line">Brand: Hidecor — Commercial Interiors, Design + Build</p>
+      </div>
+    </div>
+
+    <!-- B: Scenario -->
+    <div class="scenario-wrap">
+      <div class="scenario-card">
+        <span class="scenario-label">The Scenario</span>
+        <p class="scenario-body">
+          Hidecor completed a <span class="gold">22,000 sq ft</span> GCC office in Bengaluru for a European fintech company. The space has a double-height atrium, a 40-person war room, and a rooftop breakout zone. Handover was last Friday. The CEO wants it on social by <span class="gold">Monday</span>. There is no photographer on site. You have your phone, <span class="gold">three hours</span>, and a half-charged laptop.
+        </p>
+      </div>
+    </div>
+
+    <!-- Stat Strip -->
+    <div class="stat-strip">
+      <div class="stat-strip-inner">
+        <div class="stat-item">
+          <div class="stat-number" data-count="22000" data-suffix="">0</div>
+          <div class="stat-label">sq ft built</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-count-text="14 Weeks">14 Weeks</div>
+          <div class="stat-label">to complete</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-count-text="3 Hours">3 Hours</div>
+          <div class="stat-label">to execute</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C: Deliverables -->
+    <div class="deliverables-wrap">
+      <div class="deliverables-inner">
+        <span class="deliverables-label">Deliverables</span>
+        <div class="deliverables-grid">
+          <div class="del-card">
+            <span class="del-arrow">→</span>
+            <p class="del-text">A 5-slide Instagram carousel — IG dimensions, designed for the feed, not just screenshotted.</p>
+          </div>
+          <div class="del-card">
+            <span class="del-arrow">→</span>
+            <p class="del-text">A LinkedIn post version — different format, different audience, different tone. Not a resize.</p>
+          </div>
+          <div class="del-card">
+            <span class="del-arrow">→</span>
+            <p class="del-text">A Reels cover frame + on-screen text layout for a 30-second walkthrough reel.</p>
+          </div>
+          <div class="del-card">
+            <span class="del-arrow">→</span>
+            <p class="del-text">Written answers to the two strategic questions in the "Also Answer" section below.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Copy Reference -->
+    <div class="copy-ref-wrap">
+      <div class="copy-ref-inner">
+        <button class="copy-ref-toggle" onclick="toggleCopyRef(this)">
+          <span>VIEW COPY REFERENCE</span> <span>→</span>
+        </button>
+        <div class="copy-ref-content" id="copyRefContent">
+          <div class="copy-ref-card">
+            <span class="copy-section-label">Instagram Carousel — Slide Copy</span>
+            <div class="carousel-slides" id="carouselSlides">
+              <div class="slide-card">
+                <div class="slide-num">01</div>
+                <div class="slide-text">22,000 sq ft.<br>14 weeks.<br>One handed-over GCC office.<br>Swipe to see it.</div>
+              </div>
+              <div class="slide-card">
+                <div class="slide-num">02</div>
+                <div class="slide-text">A double-height atrium that earns its floor plan. Every square foot lives.</div>
+              </div>
+              <div class="slide-card">
+                <div class="slide-num">03</div>
+                <div class="slide-text">40-person war room. Built for the days that matter most.</div>
+              </div>
+              <div class="slide-card">
+                <div class="slide-num">04</div>
+                <div class="slide-text">Rooftop breakout zone. Where the best ideas get made.</div>
+              </div>
+              <div class="slide-card">
+                <div class="slide-num">05</div>
+                <div class="slide-text">Hidecor · Commercial Interiors · Design + Build<br>hidecor.in</div>
+              </div>
+            </div>
+
+            <div class="copy-block" style="margin-top:28px">
+              <span class="copy-section-label">LinkedIn Post Copy</span>
+              <p class="copy-body">We do not believe in offices that look good in photos but feel empty to work in. This 22,000 sq ft GCC campus in Bengaluru was built for the former — then we made it work for the latter. Handover was Friday. Here is what 14 weeks of design and build looks like when the brief is: make it functional, make it beautiful, and make it on time. <span style="color:var(--gold)">#CommercialInteriors #GCC #HidecorBuilt</span></p>
+            </div>
+
+            <div class="copy-block" style="margin-top:24px">
+              <span class="copy-section-label">Reels Overlay Copy</span>
+              <p class="copy-body">
+                0:00 — "22,000 sq ft. Designed and built in 14 weeks."<br>
+                0:10 — "The atrium. The war room. The rooftop."<br>
+                0:22 — "GCC office. Bengaluru."<br>
+                0:28 — "Hidecor. Commercial Interiors."
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D: Q&A -->
+    <div class="qa-wrap">
+      <div class="qa-inner">
+        <span class="qa-label">Also Answer</span>
+        <div class="qa-item">
+          <div class="qa-question" onclick="toggleQA(this)">
+            <span class="qa-q-text">If you had to write a single caption that worked on both Instagram and LinkedIn — what would it say? And why doesn't that actually work?</span>
+            <span class="qa-toggle">+</span>
+          </div>
+          <div class="qa-answer-wrap">
+            <div class="qa-answer">Write your answer here. Consider what makes Instagram and LinkedIn audiences fundamentally different, and why a unified caption always compromises one.</div>
+          </div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-question" onclick="toggleQA(this)">
+            <span class="qa-q-text">The CEO is standing over your shoulder and says the carousel looks "too minimal." What do you say?</span>
+            <span class="qa-toggle">+</span>
+          </div>
+          <div class="qa-answer-wrap">
+            <div class="qa-answer">Write your answer here. This is a test of how you hold your design decisions under pressure — not just what you designed, but why.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- E: Testing Strip -->
+    <div class="testing-strip">
+      <div class="testing-inner">
+        <span class="testing-label">We Are Testing</span>
+        <span class="testing-text">Platform fluency, visual hierarchy, and whether your Instagram brain and LinkedIn brain are actually different.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- BRIEF 02 — THE FICTIONAL BRAND LAUNCH                   -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <div class="brief-divider"><div class="full-rule" id="rule2"></div></div>
+
+  <section class="brief-section" id="brief-02">
+    <div class="brief-header">
+      <div class="brief-watermark" data-watermark>02</div>
+      <div class="brief-header-inner">
+        <span class="brief-tag">Brief 02 of 05</span>
+        <h2 class="brief-title">The Fictional<br>Brand Launch</h2>
+        <div class="pill-row">
+          <span class="pill">Aarka Studio</span>
+          <span class="pill">Brand Identity</span>
+          <span class="pill">Newsletter</span>
+          <span class="pill">Bengaluru</span>
+        </div>
+        <p class="pull-quote">"Build us a brand identity for our first client mailer. We have nothing yet."</p>
+        <p class="brand-line">Brand: Aarka Studio — Boutique workplace design consultancy, Bengaluru</p>
+      </div>
+    </div>
+
+    <div class="scenario-wrap">
+      <div class="scenario-card">
+        <span class="scenario-label">The Scenario</span>
+        <p class="scenario-body">
+          Aarka Studio is <span class="gold">two architects</span> who left a large firm to do things differently. Their clients are Series B startups and mid-size tech companies who want beautiful, functional offices without a <span class="gold">6-month timeline</span>. They are about to send their first newsletter to <span class="gold">200 potential clients</span>. They have no logo, no colour palette, no brand voice. They have a name, a belief, and a list of 200 email addresses.
+        </p>
+      </div>
+    </div>
+
+    <!-- Belief callout -->
+    <div class="belief-wrap" style="padding-top:40px">
+      <div class="belief-inner">
+        <div class="belief-box">
+          <p class="belief-quote">"Good design does not need a big budget."</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="deliverables-wrap">
+      <div class="deliverables-inner">
+        <span class="deliverables-label">Deliverables</span>
+        <div class="deliverables-grid">
+          <div class="del-card">
+            <span class="del-arrow">→</span>
+            <p class="del-text">A logo mark or wordmark — one direction only, no variations needed. Show us where you started, not where you could go.</p>
+          </div>
+          <div class="del-card">
+            <span class="del-arrow">→</span>
+            <p class="del-text">A colour palette with 3–4 colours and one line explaining each choice. The line is as important as the colour.</p>
+          </div>
+          <div class="del-card">
+            <span class="del-arrow">→</span>
+            <p class="del-text">The first newsletter — fully designed, real copy, ready to send. Subject line included.</p>
+          </div>
+          <div class="del-card">
+            <span class="del-arrow">→</span>
+            <p class="del-text">One additional brand touchpoint of your choice. Make the choice matter.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-wrap">
+      <div class="qa-inner">
+        <span class="qa-label">Also Answer</span>
+        <div class="qa-item">
+          <div class="qa-question" onclick="toggleQA(this)">
+            <span class="qa-q-text">What was the first design decision you made for Aarka — and what did you deliberately avoid?</span>
+            <span class="qa-toggle">+</span>
+          </div>
+          <div class="qa-answer-wrap">
+            <div class="qa-answer">Write your answer here. The first decision is rarely the logo. What was yours?</div>
+          </div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-question" onclick="toggleQA(this)">
+            <span class="qa-q-text">The newsletter subject line: what made you choose it?</span>
+            <span class="qa-toggle">+</span>
+          </div>
+          <div class="qa-answer-wrap">
+            <div class="qa-answer">Write your answer here. Subject lines are strategy disguised as copywriting.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testing-strip">
+      <div class="testing-inner">
+        <span class="testing-label">We Are Testing</span>
+        <span class="testing-text">Brand thinking from zero, newsletter design, and whether your collateral choices are intentional or accidental.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- BRIEF 03 — THE BROKEN BRIEF                             -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <div class="brief-divider"><div class="full-rule" id="rule3"></div></div>
+
+  <section class="brief-section" id="brief-03">
+    <div class="brief-header">
+      <div class="brief-watermark" data-watermark>03</div>
+      <div class="brief-header-inner">
+        <span class="brief-tag">Brief 03 of 05</span>
+        <h2 class="brief-title">The Broken Brief</h2>
+        <div class="pill-row">
+          <span class="pill">Hidecor</span>
+          <span class="pill">OOH Hoarding</span>
+          <span class="pill">Print</span>
+        </div>
+        <p class="brand-line">Brand: Hidecor — Commercial Interiors, Design + Build</p>
+      </div>
+    </div>
+
+    <!-- WhatsApp bubble -->
+    <div class="whatsapp-wrap" style="padding-top:48px; padding-bottom:40px">
+      <div class="whatsapp-inner">
+        <div class="whatsapp-bubble" id="whatsappBubble">
+          <p class="whatsapp-text">
+            "Premium but approachable. Gold but not overdone. Bold but do not make it look like a real estate ad. Maybe add a tagline. Something smart. You know what I mean."
+          </p>
+          <div class="whatsapp-time">9:00 PM &nbsp;✓✓</div>
+        </div>
+        <div class="location-tags">
+          <span class="loc-tag">Whitefield</span>
+          <span class="loc-tag">Koramangala</span>
+          <span class="loc-tag">Hebbal</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scenario-wrap">
+      <div class="scenario-card">
+        <span class="scenario-label">The Scenario</span>
+        <p class="scenario-body">
+          That message above is your brief. Hidecor is putting up <span class="gold">three hoardings</span> across Bengaluru — Whitefield, Koramangala, and Hebbal. The budget is real, the sites are booked, and the printer needs files by end of week. The only thing missing is a designer who can turn a WhatsApp message into something that looks like a <span class="gold">considered brand decision</span>.
+        </p>
+      </div>
+    </div>
+
+    <!-- Tagline Direction Cards -->
+    <div class="tagline-directions">
+      <div class="tagline-directions-inner">
+        <span class="tagline-label">Tagline Directions — Choose One, Make It Yours</span>
+        <div class="direction-grid">
+          <div class="direction-card">
+            <div class="dir-badge">A</div>
+            <div class="dir-label">Confidence</div>
+            <div class="dir-tagline">"Spaces that mean business."</div>
+            <div class="dir-tone">Direct, no-nonsense. Bold type and minimal layout.</div>
+          </div>
+          <div class="direction-card selected">
+            <div class="dir-badge filled">B</div>
+            <div class="dir-label">Provocation</div>
+            <div class="dir-tagline">"Your office is saying something. Is it right?"</div>
+            <div class="dir-tone">Challenges the viewer. Lots of white space + strong visual element.</div>
+            <span class="dir-selected-pill">SELECTED</span>
+          </div>
+          <div class="direction-card">
+            <div class="dir-badge">C</div>
+            <div class="dir-label">Craft</div>
+            <div class="dir-tagline">"Designed in the details. Delivered on time."</div>
+            <div class="dir-tone">Reassurance-led. Geometry or texture-based layout.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="deliverables-wrap">
+      <div class="deliverables-inner">
+        <span class="deliverables-label">Deliverables</span>
+        <div class="deliverables-grid">
+          <div class="del-card">
+            <span class="del-arrow">→</span>
+            <p class="del-text">The hoarding design — typography and geometry only, no stock photography. Max 8 words of copy.</p>
+          </div>
+          <div class="del-card">
+            <span class="del-arrow">→</span>
+            <p class="del-text">Both a full-colour and single-colour version. Show you understand production constraints.</p>
+          </div>
+          <div class="del-card">
+            <span class="del-arrow">→</span>
+            <p class="del-text">A mockup showing it in context on a hoarding reference photo.</p>
+          </div>
+          <div class="del-card">
+            <span class="del-arrow">→</span>
+            <p class="del-text">One digital adaptation — LinkedIn banner or Instagram story.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-wrap">
+      <div class="qa-inner">
+        <span class="qa-label">Also Answer</span>
+        <div class="qa-item">
+          <div class="qa-question" onclick="toggleQA(this)">
+            <span class="qa-q-text">What are the two things in the brief you pushed back on — and how would you phrase that to the CEO?</span>
+            <span class="qa-toggle">+</span>
+          </div>
+          <div class="qa-answer-wrap">
+            <div class="qa-answer">Write your answer here. The ability to push back professionally is as valuable as the design itself.</div>
+          </div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-question" onclick="toggleQA(this)">
+            <span class="qa-q-text">What does your tagline say, and what were the two options you rejected?</span>
+            <span class="qa-toggle">+</span>
+          </div>
+          <div class="qa-answer-wrap">
+            <div class="qa-answer">Write your answer here. The options you reject say as much about your taste as the option you chose.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testing-strip">
+      <div class="testing-inner">
+        <span class="testing-label">We Are Testing</span>
+        <span class="testing-text">How you handle ambiguity, offline design confidence, and whether you can make a decision without being hand-held.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- BRIEF 04 — THE VIDEO ART DIRECTION TEST                 -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <div class="brief-divider"><div class="full-rule" id="rule4"></div></div>
+
+  <section class="brief-section" id="brief-04">
+    <div class="brief-header">
+      <div class="brief-watermark" data-watermark>04</div>
+      <div class="brief-header-inner">
+        <span class="brief-tag">Brief 04 of 05</span>
+        <h2 class="brief-title">The Video Art<br>Direction Test</h2>
+        <div class="pill-row">
+          <span class="pill">Maara Spaces</span>
+          <span class="pill">Brand Film</span>
+          <span class="pill">Reels</span>
+          <span class="pill">YouTube</span>
+        </div>
+        <p class="pull-quote">"We are shooting a brand film next week. We need you to art direct it."</p>
+        <p class="brand-line">Brand: Maara Spaces — Co-working and managed office brand</p>
+      </div>
+    </div>
+
+    <!-- Urgency strip -->
+    <div class="urgency-strip">
+      <div class="urgency-inner">
+        <div class="urgency-item">
+          <div class="urgency-num">60 Sec</div>
+          <div class="urgency-desc">brand film</div>
+        </div>
+        <div class="urgency-item">
+          <div class="urgency-num">3 Cities</div>
+          <div class="urgency-desc">launching</div>
+        </div>
+        <div class="urgency-item">
+          <div class="urgency-num">6 Days</div>
+          <div class="urgency-desc">to handoff</div>
+        </div>
+        <div class="urgency-item">
+          <div class="urgency-num">No VO</div>
+          <div class="urgency-desc">music-led</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scenario-wrap">
+      <div class="scenario-card">
+        <span class="scenario-label">The Scenario</span>
+        <p class="scenario-body">
+          Maara Spaces is launching in <span class="gold">three Indian cities</span>. They are shooting a <span class="gold">60-second brand film</span> — no voiceover, music-led, meant for Instagram Reels and YouTube pre-roll. The shoot is in 6 days. The director has the location and crew. What they do not have is a visual direction.
+        </p>
+      </div>
+    </div>
+
+    <!-- Constraint box -->
+    <div class="constraint-wrap" style="padding-top:40px">
+      <div class="constraint-inner">
+        <div class="constraint-box">
+          <span class="constraint-label">Key Constraint</span>
+          <p class="constraint-text">You will not be on set. You need to hand off everything in a single document the director can execute without calling you. If they have to call you, you haven't done your job.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="deliverables-wrap">
+      <div class="deliverables-inner">
+        <span class="deliverables-label">Deliverables</span>
+        <div class="deliverables-grid">
+          <div class="del-card" style="grid-column: 1 / -1">
+            <span class="del-arrow">→</span>
+            <p class="del-text">A mood board: 6–8 visual references, each labelled with one line explaining why it's there. Not a Pinterest dump — a directorial argument.</p>
+          </div>
+          <div class="del-card">
+            <span class="del-arrow">→</span>
+            <p class="del-text">On-screen text design: font, size, placement, timing. Show it in context of a frame.</p>
+          </div>
+          <div class="del-card">
+            <span class="del-arrow">→</span>
+            <p class="del-text">The YouTube thumbnail design. This is the first frame anyone sees before they press play.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-wrap">
+      <div class="qa-inner">
+        <span class="qa-label">Also Answer</span>
+        <div class="qa-item">
+          <div class="qa-question" onclick="toggleQA(this)">
+            <span class="qa-q-text">What is the single visual idea that holds the whole film together?</span>
+            <span class="qa-toggle">+</span>
+          </div>
+          <div class="qa-answer-wrap">
+            <div class="qa-answer">Write your answer here. Not a mood, not a vibe — an idea. One sentence.</div>
+          </div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-question" onclick="toggleQA(this)">
+            <span class="qa-q-text">What did you decide NOT to show in this film, and why?</span>
+            <span class="qa-toggle">+</span>
+          </div>
+          <div class="qa-answer-wrap">
+            <div class="qa-answer">Write your answer here. Restraint is a creative decision too.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testing-strip">
+      <div class="testing-inner">
+        <span class="testing-label">We Are Testing</span>
+        <span class="testing-text">Visual direction thinking, whether you understand video as a medium (not just a vertical format), and how you communicate to a crew who cannot read your mind.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- BRIEF 05 — THE WILDCARD                                 -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <div class="brief-divider"><div class="full-rule" id="rule5"></div></div>
+
+  <section class="brief-section" id="brief-05">
+    <div class="brief-header wildcard">
+      <div class="brief-watermark" data-watermark style="font-size:340px; opacity:1">05</div>
+      <div class="brief-header-inner">
+        <span class="brief-tag">Brief 05 of 05</span>
+        <h2 class="brief-title split">
+          No brief.<br>No format. No rules.
+        </h2>
+        <p class="brand-line" style="margin-top:20px">Brand: Anything. &nbsp;Format: Anything.</p>
+      </div>
+    </div>
+
+    <!-- Wildcard pull quote -->
+    <div class="wildcard-pull">
+      <p class="wildcard-pull-text">"Show us something we did not ask for."</p>
+      <p class="wildcard-brand-line">Brand: Anything. &nbsp;&nbsp;Format: Anything.</p>
+    </div>
+
+    <div class="scenario-wrap">
+      <div class="scenario-card">
+        <span class="scenario-label">The Scenario</span>
+        <p class="scenario-body">
+          This is the brief where you show us <span class="gold">who you actually are</span> as a creative — not who you think we want to hire. Make one piece of design that you would put in your portfolio forever. The only rule: it has to be <span class="gold">real enough to actually run</span>.
+        </p>
+      </div>
+    </div>
+
+    <div class="deliverables-wrap">
+      <div class="deliverables-inner">
+        <span class="deliverables-label">Deliverables</span>
+        <div class="deliverables-grid three">
+          <div class="del-card large">
+            <span class="del-arrow">→</span>
+            <p class="del-text">The work — whatever form it takes. A campaign, a film treatment, a publication, an identity system, a single poster. Whatever it is, it should be complete.</p>
+          </div>
+          <div class="del-card large">
+            <span class="del-arrow">→</span>
+            <p class="del-text">A 5-line brief you wrote for yourself before starting. Not a brief for us — a brief for you. Show us how you think before you design.</p>
+          </div>
+          <div class="del-card large">
+            <span class="del-arrow">→</span>
+            <p class="del-text">One sentence: what would make this piece fail? The ability to see failure from the inside is rarer than you think.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-wrap">
+      <div class="qa-inner">
+        <span class="qa-label">Also Answer</span>
+        <div class="qa-item">
+          <div class="qa-question" onclick="toggleQA(this)">
+            <span class="qa-q-text">Why this idea, out of everything you could have made?</span>
+            <span class="qa-toggle">+</span>
+          </div>
+          <div class="qa-answer-wrap">
+            <div class="qa-answer">Write your answer here. There were a hundred directions you could have gone. Why this one?</div>
+          </div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-question" onclick="toggleQA(this)">
+            <span class="qa-q-text">What is the version of this you wanted to make but did not — and why?</span>
+            <span class="qa-toggle">+</span>
+          </div>
+          <div class="qa-answer-wrap">
+            <div class="qa-answer">Write your answer here. The abandoned version tells us as much as the final one.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testing-strip wildcard">
+      <div class="testing-inner">
+        <span class="testing-label">We Are Testing</span>
+        <span class="testing-text">Creative instinct, range, and whether you have a point of view beyond what you are asked to produce. This is the brief that separates people who execute from people who create.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ───────────────────────────────────────────── -->
+  <footer id="site-footer">
+    <p class="footer-luck">Good luck.</p>
+    <p class="footer-sub">We are rooting for you.</p>
+    <div class="footer-rule"></div>
+    <div class="footer-brand">HIDECOR</div>
+    <div class="footer-tagline">Commercial Interiors · Design + Build · hidecor.in</div>
+  </footer>
+
+  <!-- ════════════════════════════════════════════════════════
+       JAVASCRIPT — GSAP + Interactions
+  ═════════════════════════════════════════════════════════ -->
+  <script>
+  gsap.registerPlugin(ScrollTrigger);
+  const isMobile = window.innerWidth < 769;
+
+  /* ── Custom Cursor ───────────────────────────────────── */
+  if (!isMobile) {
+    const dot  = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      gsap.set(dot, { x: mouseX, y: mouseY });
+    });
+
+    gsap.ticker.add(() => {
+      ringX += (mouseX - ringX) * 0.14;
+      ringY += (mouseY - ringY) * 0.14;
+      gsap.set(ring, { x: ringX, y: ringY });
+    });
+
+    // Hover expand on interactive elements
+    document.querySelectorAll('a, button, .del-card, .qa-question, .direction-card, .copy-ref-toggle').forEach(el => {
+      el.addEventListener('mouseenter', () => gsap.to(ring, { width: 48, height: 48, duration: 0.3 }));
+      el.addEventListener('mouseleave', () => gsap.to(ring, { width: 34, height: 34, duration: 0.3 }));
+    });
+  }
+
+  /* ── Nav visibility and scroll state ────────────────── */
+  const navbar = document.getElementById('navbar');
+  gsap.to(navbar, { opacity: 1, duration: 0.3, delay: 0.2 });
+
+  ScrollTrigger.create({
+    start: '80px top',
+    onEnter:      () => navbar.classList.add('scrolled'),
+    onLeaveBack:  () => navbar.classList.remove('scrolled')
+  });
+
+  /* ── Hero Load Sequence ──────────────────────────────── */
+  const heroTL = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+  // Clip-from-below helper
+  function clipFromBelow(el, delay) {
+    gsap.set(el, { y: '110%' });
+    heroTL.to(el, { y: '0%', duration: 0.75 }, delay);
+  }
+
+  clipFromBelow('#heroTag',  0.2);
+  clipFromBelow('#heroH1',   0.4);
+  clipFromBelow('#heroH1b',  0.55);
+  heroTL.fromTo('#heroBody', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, 0.75);
+  heroTL.fromTo('#heroCTA',  { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5 }, 0.95);
+
+  // Arrow bounce
+  gsap.to('#arrowBounce', {
+    y: 5, repeat: -1, yoyo: true,
+    duration: 0.8, ease: 'power1.inOut', delay: 1.5
+  });
+
+  /* ── Before You Start slide-up ───────────────────────── */
+  gsap.fromTo('#before-start .before-grid',
+    { y: 50, opacity: 0 },
+    { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
+      scrollTrigger: { trigger: '#before-start', start: 'top 75%' }
+    }
+  );
+
+  /* ── Gold divider rules animate ─────────────────────── */
+  ['#rule1','#rule2','#rule3','#rule4','#rule5'].forEach(id => {
+    gsap.to(id, {
+      scaleX: 1, duration: 1.2, ease: 'power3.out',
+      scrollTrigger: { trigger: id, start: 'top 90%' }
+    });
+  });
+
+  /* ── Brief sections entrance ─────────────────────────── */
+  document.querySelectorAll('.brief-section').forEach(section => {
+    const watermark = section.querySelector('[data-watermark]');
+    const tag       = section.querySelector('.brief-tag');
+    const title     = section.querySelector('.brief-title');
+    const cards     = section.querySelectorAll('.del-card');
+    const qaItems   = section.querySelectorAll('.qa-item');
+
+    if (watermark) {
+      gsap.fromTo(watermark,
+        { scale: 1.25, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 1, ease: 'power3.out',
+          scrollTrigger: { trigger: section.querySelector('.brief-header'), start: 'top 75%' }
+        }
+      );
+    }
+    if (tag) {
+      gsap.fromTo(tag,
+        { x: -20, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.6, ease: 'power3.out',
+          scrollTrigger: { trigger: tag, start: 'top 85%' }
+        }
+      );
+    }
+    if (title) {
+      gsap.fromTo(title,
+        { y: 60, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
+          scrollTrigger: { trigger: title, start: 'top 80%' }
+        }
+      );
+    }
+    if (cards.length) {
+      gsap.fromTo(cards,
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out',
+          stagger: 0.1,
+          scrollTrigger: { trigger: cards[0].closest('.deliverables-wrap'), start: 'top 80%' }
+        }
+      );
+    }
+  });
+
+  /* ── Number count-up (Brief 01) ──────────────────────── */
+  const countEl = document.querySelector('[data-count="22000"]');
+  if (countEl) {
+    const obj = { val: 0 };
+    gsap.to(obj, {
+      val: 22000, duration: 1.2, ease: 'power2.out',
+      onUpdate: () => { countEl.textContent = Math.round(obj.val).toLocaleString(); },
+      scrollTrigger: { trigger: '.stat-strip', start: 'top 80%' }
+    });
+  }
+
+  /* ── Scenario cards entrance ─────────────────────────── */
+  document.querySelectorAll('.scenario-card').forEach(card => {
+    gsap.fromTo(card,
+      { x: -20, opacity: 0 },
+      { x: 0, opacity: 1, duration: 0.7, ease: 'power3.out',
+        scrollTrigger: { trigger: card, start: 'top 80%' }
+      }
+    );
+  });
+
+  /* ── WhatsApp bubble spring in ───────────────────────── */
+  const bubble = document.getElementById('whatsappBubble');
+  if (bubble) {
+    gsap.fromTo(bubble,
+      { scale: 0.92, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.6, ease: 'back.out(1.5)',
+        scrollTrigger: { trigger: bubble, start: 'top 85%' }
+      }
+    );
+  }
+
+  /* ── Direction cards entrance ────────────────────────── */
+  const dirCards = document.querySelectorAll('.direction-card');
+  if (dirCards.length) {
+    gsap.fromTo(dirCards,
+      { y: 30, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out', stagger: 0.12,
+        scrollTrigger: { trigger: '.direction-grid', start: 'top 80%' }
+      }
+    );
+  }
+
+  /* ── Footer entrance ─────────────────────────────────── */
+  gsap.fromTo('#site-footer',
+    { y: 30, opacity: 0 },
+    { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
+      scrollTrigger: { trigger: '#site-footer', start: 'top 85%' }
+    }
+  );
+
+  /* ── Before-You-Start individual items ───────────────── */
+  gsap.fromTo('.before-rule-item',
+    { x: 20, opacity: 0 },
+    { x: 0, opacity: 1, duration: 0.5, ease: 'power3.out', stagger: 0.1,
+      scrollTrigger: { trigger: '.before-rules', start: 'top 80%' }
+    }
+  );
+
+  /* ════════════════════════════════════════════════════════
+     INTERACTIVE FUNCTIONS
+  ═════════════════════════════════════════════════════════ */
+
+  /* Q&A Accordion */
+  function toggleQA(trigger) {
+    const item        = trigger.closest('.qa-item');
+    const answerWrap  = item.querySelector('.qa-answer-wrap');
+    const isOpen      = item.classList.contains('open');
+
+    // Close all within same section
+    const parent = item.closest('.qa-inner');
+    parent.querySelectorAll('.qa-item.open').forEach(openItem => {
+      openItem.classList.remove('open');
+      openItem.querySelector('.qa-answer-wrap').style.maxHeight = '0';
+    });
+
+    if (!isOpen) {
+      item.classList.add('open');
+      const scrollH = answerWrap.querySelector('.qa-answer').scrollHeight + 32;
+      answerWrap.style.maxHeight = scrollH + 'px';
+    }
+  }
+
+  /* Copy Reference Toggle */
+  function toggleCopyRef(btn) {
+    const content = document.getElementById('copyRefContent');
+    const isOpen  = content.style.maxHeight && content.style.maxHeight !== '0px';
+    if (isOpen) {
+      content.style.maxHeight = '0';
+      btn.querySelector('span:first-child').textContent = 'VIEW COPY REFERENCE';
+    } else {
+      content.style.maxHeight = content.scrollHeight + 'px';
+      btn.querySelector('span:first-child').textContent = 'HIDE COPY REFERENCE';
+    }
+  }
+
+  // Expose to global (onclick attributes)
+  window.toggleQA       = toggleQA;
+  window.toggleCopyRef  = toggleCopyRef;
+  </script>
+</body>
+</html>
